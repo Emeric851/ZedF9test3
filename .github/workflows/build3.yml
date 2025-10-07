@@ -24,24 +24,22 @@ jobs:
     - name: Give execute permission to gradlew
       run: chmod +x gradlew
 
-    # Étape 4 : Installer Android SDK
-    - name: Download Android SDK
-      uses: android-actions/setup-android@v2
-      with:
-        api-level: 34
-        build-tools: 34.0.0
+    # Étape 4 : Installer Android SDK (version corrigée)
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
 
     # Étape 5 : Construire l’APK Debug
     - name: Build Debug APK
       run: ./gradlew assembleDebug
 
-    # Étape 6 : Lister les fichiers de sortie pour débogage
+    # Étape 6 : Lister les fichiers de sortie pour vérifier
     - name: List output files
-      run: ls -R app/build/outputs || true
+      run: ls -R app/build || true
 
-    # Étape 7 : Uploader l’APK trouvé (quel que soit son nom ou dossier)
+    # Étape 7 : Uploader tous les APK générés
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: APK
-        path: app/build/outputs/**/*.apk
+        path: |
+          **/*.apk
